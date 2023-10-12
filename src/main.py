@@ -5,32 +5,34 @@ import json
 import time
 
 
-class Main:
+class App:
     def __init__(self):
         self._hub_connection = None
         self.HOST = None  # Setup your host here
         self.TOKEN = None  # Setup your token here
-        self.TICKETS = None  # Setup your tickets here
+
+        # To be defined by your team
         self.T_MAX = None  # Setup your max temperature here
         self.T_MIN = None  # Setup your min temperature here
         self.DATABASE = None  # Setup your database here
+
 
     def __del__(self):
         if self._hub_connection != None:
             self._hub_connection.stop()
 
-    def setup(self):
-        self.setSensorHub()
 
     def start(self):
-        self.setup()
+        """Start Oxygen CS."""
+        self.setup_sensor_hub()
         self._hub_connection.start()
-
         print("Press CTRL+C to exit.")
         while True:
             time.sleep(2)
 
-    def setSensorHub(self):
+
+    def setup_sensor_hub(self):
+        """Configure hub connection and subscribe to sensor data events."""
         self._hub_connection = (
             HubConnectionBuilder()
             .with_url(f"{self.HOST}/SensorHub?token={self.TOKEN}")
@@ -45,34 +47,48 @@ class Main:
             )
             .build()
         )
-
-        self._hub_connection.on("ReceiveSensorData", self.onSensorDataReceived)
+        self._hub_connection.on("ReceiveSensorData", self.on_sensor_data_received)
         self._hub_connection.on_open(lambda: print("||| Connection opened."))
         self._hub_connection.on_close(lambda: print("||| Connection closed."))
         self._hub_connection.on_error(lambda data: print(f"||| An exception was thrown closed: {data.error}"))
 
-    def onSensorDataReceived(self, data):
+
+    def on_sensor_data_received(self, data):
+        """Callback method to handle sensor data on reception."""
         try:
             print(data[0]["date"] + " --> " + data[0]["data"])
-            date = data[0]["date"]
-            dp = float(data[0]["data"])
-            self.send_temperature_to_fastapi(date, dp)
-            self.analyzeDatapoint(date, dp)
+            date:str = data[0]["date"]
+            temperature:float = float(data[0]["data"])
+            self.save_event_to_database(date, temperature)
+            self.take_action(temperature)
         except Exception as err:
             print(err)
 
-    def analyzeDatapoint(self, date, data):
-        if float(data) >= float(self.T_MAX):
-            self.sendActionToHvac(date, "TurnOnAc", self.TICKETS)
-        elif float(data) <= float(self.T_MIN):
-            self.sendActionToHvac(date, "TurnOnHeater", self.TICKETS)
 
-    def sendActionToHvac(self, date, action, nbTick):
-        r = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}/{nbTick}")
+    def take_action(self, temperature:float):
+        """Take action to HVAC depending on current temperature.
+        
+        temperature (float): Current temperature.
+        """
+        if float(temperature) >= float(self.T_MAX):
+            self.send_action_to_hvac("TurnOnAc")
+        elif float(temperature) <= float(self.T_MIN):
+            self.send_action_to_hvac("TurnOnHeater")
+
+
+    def send_action_to_hvac(self, action:str):
+        """Send action query to the HVAC service."""
+        r = requests.get(f"{self.HOST}/api/hvac/{self.TOKEN}/{action}")
         details = json.loads(r.text)
         print(details)
 
-    def send_event_to_database(self, timestamp, event):
+
+    def save_event_to_database(self, date:str, temperature:float):
+        """Save sensor data into database.
+        
+        date (str): Data timestamp.
+        temperature (float): Data temperature. 
+        """
         try:
             # To implement
             pass
@@ -82,5 +98,5 @@ class Main:
 
 
 if __name__ == "__main__":
-    main = Main()
-    main.start()
+    app = App()
+    app.start()
