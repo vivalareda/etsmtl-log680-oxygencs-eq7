@@ -36,7 +36,7 @@ You need to setup the following variables inside the App class:
 - TOKEN: The token for authenticating requests.
 - T_MAX: The maximum allowed temperature.
 - T_MIN: The minimum allowed temperature.
-- DATABASE: The database connection details.
+- DATABASE_URL: The database connection URL.
 
 ## Running the Program
 
