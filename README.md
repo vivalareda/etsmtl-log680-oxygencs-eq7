@@ -30,11 +30,10 @@ pipenv install
 
 ## Setup
 
-You need to setup the following variables inside the Main class:
+You need to setup the following variables inside the App class:
 
 - HOST: The host of the sensor hub and HVAC system.
 - TOKEN: The token for authenticating requests.
-- TICKETS: The number of tickets.
 - T_MAX: The maximum allowed temperature.
 - T_MIN: The minimum allowed temperature.
 - DATABASE: The database connection details.
@@ -44,7 +43,7 @@ You need to setup the following variables inside the Main class:
 After setup, you can start the program with the following command:
 
 ```
-pipenv run strart
+pipenv run start
 ```
 
 ## Logging
