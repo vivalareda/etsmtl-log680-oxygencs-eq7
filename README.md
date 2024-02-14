@@ -33,7 +33,7 @@ You need to setup the following variables inside the App class:
 
 After setup, you can start the program with the following command:
 
-```
+```bash
 pipenv run start
 ```
 
