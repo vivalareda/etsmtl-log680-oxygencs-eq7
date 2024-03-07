@@ -52,8 +52,6 @@ class TestApp(unittest.TestCase):
                 mock_send_action.assert_called_with("TurnOnAc")
                 app.take_action(17)
                 mock_send_action.assert_called_with("TurnOnHeater")
-
-# Make sure to exclude database-related tests as requested.
-
+                
 if __name__ == '__main__':
     unittest.main()
