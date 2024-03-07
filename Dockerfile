@@ -8,8 +8,9 @@ RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
 
 COPY Pipfile Pipfile.lock ./
 
-RUN pipenv install --deploy --system --ignore-pipfile
-
+RUN pipenv install --deploy --system --ignore-pipfile && \
+    apk --no-cache del .build-deps
+    
 COPY . .
 
 RUN find /usr/local \
