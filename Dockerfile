@@ -1,12 +1,14 @@
-FROM python:3.8-slim
+FROM python:3.8-alpine
 
 WORKDIR /app
 
-RUN pip install pipenv
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
+    && pip install --no-cache-dir pipenv \
+    && apk del .build-deps
 
 COPY Pipfile Pipfile.lock ./
 
-RUN pipenv install --deploy --system
+RUN pipenv install --deploy --system --ignore-pipfile
 
 COPY . .
 
