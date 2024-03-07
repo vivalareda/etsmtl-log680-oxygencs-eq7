@@ -13,7 +13,7 @@ class App:
         self.HOST = os.getenv('HOST')
         self.TOKEN = os.getenv('TOKEN')
 
-        self.TICKETS = os.getenv('TICKETS', 1)
+        self.TICKS = os.getenv('TICKS', 1)
         self.T_MAX = os.getenv('T_MAX', '25')
         self.T_MIN = os.getenv('T_MIN', '18')
         # self.database = os.getenv('DATABASE')
