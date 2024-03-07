@@ -12,4 +12,10 @@ RUN pipenv install --deploy --system --ignore-pipfile
 
 COPY . .
 
+RUN find /usr/local \
+    \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \
+    -o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
+    -exec rm -rf '{}' + \
+    && rm -rf /root/.cache
+
 CMD ["python", "./src/main.py"]
