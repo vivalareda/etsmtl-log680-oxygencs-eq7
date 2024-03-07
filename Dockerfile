@@ -2,23 +2,16 @@ FROM python:3.8-alpine
 
 WORKDIR /app
 
-# Install virtualenv
-RUN pip install --no-cache-dir virtualenv
-RUN virtualenv venv
+RUN pip install --no-cache-dir pipenv
 
-# Activate virtual environment
-ENV VIRTUAL_ENV /app/venv
-ENV PATH /app/venv/bin:$PATH
-
-# Install dependencies
 COPY Pipfile Pipfile.lock ./
-RUN pip install --no-cache-dir pipenv && \
-    pipenv install --deploy --system --ignore-pipfile
+RUN pipenv lock --keep-outdated --requirements > requirements.txt && \
+    pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY ./src ./src
 
-RUN find /app/venv -type d -name '__pycache__' -exec rm -r {} + \
-    && find /app/venv -type d -name 'tests' -exec rm -r {} + \
-    && find /app/venv -type f -name '*.pyc' -exec rm -f {} +
+RUN find /usr/local -type d -name '__pycache__' -exec rm -r {} + \
+    && find /usr/local -type d -name 'tests' -exec rm -r {} + \
+    && find /usr/local -type f -name '*.pyc' -exec rm -f {} +
 
 CMD ["python", "./src/main.py"]
