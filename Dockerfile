@@ -1,6 +1,9 @@
 # Build stage
 FROM python:3.8-alpine3.17 as build
 
+ARG HOST
+ARG TOKEN
+
 WORKDIR /app
 
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev \
