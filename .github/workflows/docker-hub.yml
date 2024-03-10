@@ -43,8 +43,8 @@ jobs:
         with:
           push: true
           tags: |
-            ${{ github.event.repository.name }}:${{ github.sha }}
-            ${{ github.event.repository.name }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPO }}:latest
           build-args: |
             HOST=${{ secrets.HOST }}
             TOKEN=${{ secrets.TOKEN }}
