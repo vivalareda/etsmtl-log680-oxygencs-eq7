@@ -61,7 +61,7 @@ class App:
             # _timestamp = data[0]["date"] # Variable not used
             temperature = float(data[0]["data"])
             self.take_action(temperature)
-        except Exception as err:
+        except KeyError as err:
             print(f"Error processing sensor data: {err}")
 
     def take_action(self, temperature):
@@ -79,7 +79,7 @@ class App:
 
     def save_event_to_database(self, timestamp, temperature):
         """Save sensor data into database."""
-        # TODO
+        # Add code here to save the sensor data into the database
 
 if __name__ == "__main__":
     app = App()
