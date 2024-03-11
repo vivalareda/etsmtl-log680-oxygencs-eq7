@@ -3,7 +3,9 @@ import logging
 import os
 import time
 import requests
+import psycopg2.errors
 from signalrcore.hub_connection_builder import HubConnectionBuilder
+from src.crud import Crud, Table
 
 class App:
     def __init__(self):
@@ -17,7 +19,9 @@ class App:
         self.t_min = os.getenv('T_MIN', '18')
 
         required_vars = ['HOST', 'TOKEN']
+        self.crud_instance = Crud()
         missing_vars = [var for var in required_vars if os.getenv(var) is None]
+
         if missing_vars:
             raise EnvironmentError(f"Missing environment variables: {', '.join(missing_vars)}")
 
@@ -61,9 +65,10 @@ class App:
         """Callback method to handle sensor data on reception."""
         try:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
-            # _timestamp = data[0]["date"] # Variable not used
+            timestamp = data[0]["date"]  # Variable not used
             temperature = float(data[0]["data"])
             self.take_action(temperature)
+            self.save_event_to_database(timestamp, temperature)
         except KeyError as err:
             print(f"Error processing sensor data: {err}")
 
@@ -82,7 +87,12 @@ class App:
 
     def save_event_to_database(self, timestamp, temperature):
         """Save sensor data into database."""
-        # Add code here to save the sensor data into the database
+        try:
+            self.crud_instance.connect()
+            self.crud_instance.insert_metric(Table.HVAC_EVENTS, timestamp, str(temperature))
+            self.crud_instance.close_connection()
+        except psycopg2.Error as e:
+            print(f"Failed to save event to database: {e}")
 
 if __name__ == "__main__":
     app = App()

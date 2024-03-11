@@ -1,10 +1,11 @@
 name: ci
 
 on:
+  pull_request:
   push:
 
 jobs:
-  docker:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,6 +37,11 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
 
+  docker:
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -58,3 +64,7 @@ jobs:
           build-args: |
             HOST=${{ secrets.HOST }}
             TOKEN=${{ secrets.TOKEN }}
+            DB_NAME=${{ secrets.DB_NAME }}
+            DB_USER=${{ secrets.DB_USER }}
+            DB_HOST=${{ secrets.DB_HOST }}
+            DB_PASS=${{ secrets.DB_PASS }}
