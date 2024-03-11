@@ -31,7 +31,7 @@ class Crud:
             if table == Table.HVAC:
                 insert_query = "INSERT INTO hvac (timestamp, value, action) VALUES (%s, %s,%s)"
             elif table == Table.HVAC_EVENTS:
-                insert_query = "INSERT INTO hvac_events" 
+                insert_query = "INSERT INTO hvac_events"
                 insert_query+="(timestamp, value, action) VALUES (%s, %s,%s)"
             cursor.execute(insert_query, (metric_name, metric_value,metric_action))
             self.connection.commit()
