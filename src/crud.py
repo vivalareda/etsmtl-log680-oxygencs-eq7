@@ -15,14 +15,8 @@ class Crud:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(Crud, cls).__new__(cls)
-            cls._instance.init_singleton()
         return cls._instance
 
-    def init_singleton(self):
-        self.DB_NAME = os.getenv('DB_NAME')
-        self.DB_USER = os.getenv('DB_USER')
-        self.DB_HOST = os.getenv('DB_HOST')
-        self.DB_PASS = os.getenv('DB_PASS')
 
     def connect(self):
         self.connection = psycopg2.connect(host=os.getenv('DB_HOST'),
