@@ -25,8 +25,7 @@ RUN apk del .build-deps
 # Copy the application code
 COPY src/ src/
 
-# Distroless base image
-FROM gcr.io/distroless/python3-debian11
+FROM python:3.8-slim-buster
 
 WORKDIR /app
 
