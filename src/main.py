@@ -1,5 +1,5 @@
 import json
-from crud import Crud, Table
+from src.crud import Crud, Table
 import logging
 import os
 import time
