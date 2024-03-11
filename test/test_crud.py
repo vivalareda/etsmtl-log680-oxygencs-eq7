@@ -23,7 +23,7 @@ class TestCrud(unittest.TestCase):
 
         # Test insert_metric
         self.crud.connect() 
-        self.crud.insert_metric(Table.HVAC_EVENTS, '2024-03-11T12:00:00Z', '25')
+        self.crud.insert_metric(Table.HVAC_EVENTS, '2024-03-11T12:00:00Z', '25',"No Action Required")
         
         # Ensure the cursor execute method was called once
         mock_cursor.execute.assert_called_once()

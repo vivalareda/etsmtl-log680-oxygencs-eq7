@@ -24,15 +24,15 @@ class Crud:
                                             user=os.getenv('DB_USER'),
                                             password=os.getenv('DB_PASS'))
 
-    def insert_metric(self, table: Table, metric_name: str, metric_value: str):
+    def insert_metric(self, table: Table, metric_name: str, metric_value: str, metric_action: str):
         try:
             cursor = self.connection.cursor()
             insert_query = ""
             if table == Table.HVAC:
-                insert_query = "INSERT INTO hvac (timestamp, value) VALUES (%s, %s)"
+                insert_query = "INSERT INTO hvac (timestamp, value, action) VALUES (%s, %s,%s)"
             elif table == Table.HVAC_EVENTS:
-                insert_query = "INSERT INTO hvac_events (timestamp, value) VALUES (%s, %s)"
-            cursor.execute(insert_query, (metric_name, metric_value))
+                insert_query = "INSERT INTO hvac_events (timestamp, value, action) VALUES (%s, %s,%s)"
+            cursor.execute(insert_query, (metric_name, metric_value,metric_action))
             self.connection.commit()
             print("metric inserted successfully!")
         except psycopg2.Error as e:  # Use more specific exception

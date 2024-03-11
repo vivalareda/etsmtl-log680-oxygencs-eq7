@@ -14,7 +14,7 @@ class App:
         self.host = os.getenv('HOST')
         self.token = os.getenv('TOKEN')
 
-        self.ticks = int(os.getenv('TICKS', '10'))
+        self.ticks = int(os.getenv('TICKS', '5'))
         self.t_max = os.getenv('T_MAX', '25')
         self.t_min = os.getenv('T_MIN', '18')
 
@@ -54,7 +54,6 @@ class App:
             .build()
         )
         self._hub_connection.on("ReceiveSensorData", self.on_sensor_data_received)
-        self._hub_connection.on("ReceiveMessage", self.on_sensor_data_received)
         self._hub_connection.on_open(lambda: print("||| Connection opened."))
         self._hub_connection.on_close(lambda: print("||| Connection closed."))
         self._hub_connection.on_error(
@@ -68,17 +67,21 @@ class App:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
             timestamp = data[0]["date"]  # Variable not used
             temperature = float(data[0]["data"])
-            self.take_action(temperature)
-            self.save_event_to_database(timestamp, temperature)
+            self.take_action(timestamp,temperature)
+            #self.save_event_to_database(timestamp, temperature)
         except KeyError as err:
             print(f"Error processing sensor data: {err}")
 
-    def take_action(self, temperature):
+    def take_action(self, timestamp,temperature):
         """Take action to HVAC depending on current temperature."""
         if temperature >= float(self.t_max):
             self.send_action_to_hvac("TurnOnAc")
+            self.save_event_to_database(timestamp,temperature,"Turning on AC")
         elif temperature <= float(self.t_min):
             self.send_action_to_hvac("TurnOnHeater")
+            self.save_event_to_database(timestamp,temperature,"Turning on Heater")
+        else:
+            self.save_event_to_database(timestamp,temperature,"No Action Required")
 
     def send_action_to_hvac(self, action):
         """Send action query to the HVAC service."""
@@ -86,11 +89,14 @@ class App:
         details = json.loads(r.text)
         print(details, flush=True)
 
-    def save_event_to_database(self, timestamp, temperature):
+    def save_event_to_database(self, timestamp, temperature,action):
         """Save sensor data into database."""
         try:
             self.crud_instance.connect()
-            self.crud_instance.insert_metric(Table.HVAC_EVENTS, timestamp, str(temperature))
+            self.crud_instance.insert_metric(Table.HVAC_EVENTS,
+                                             str(timestamp),
+                                             str(temperature),
+                                             str(action))
             self.crud_instance.close_connection()
         except psycopg2.Error as e:
             print(f"Failed to save event to database: {e}")
