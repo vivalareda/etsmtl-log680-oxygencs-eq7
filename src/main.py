@@ -5,7 +5,7 @@ import time
 import requests
 import psycopg2.errors
 from signalrcore.hub_connection_builder import HubConnectionBuilder
-from crud import Crud, Table
+from src.crud import Crud, Table
 
 class App:
     def __init__(self):
