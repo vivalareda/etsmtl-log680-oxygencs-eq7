@@ -27,13 +27,13 @@ class TestApp(unittest.TestCase):
     @patch('src.main.App.send_action_to_hvac')
     def test_take_action_turn_on_ac(self, mock_send_action):
         """Test AC turns on when temperature is above T_MAX."""
-        self.app.take_action(float(self.app.t_max) + 1)
+        self.app.take_action(1,float(self.app.t_max) + 1)
         mock_send_action.assert_called_once_with('TurnOnAc')
 
     @patch('src.main.App.send_action_to_hvac')
     def test_take_action_turn_on_heater(self, mock_send_action):
         """Test Heater turns on when temperature is below T_MIN."""
-        self.app.take_action(float(self.app.t_min) - 1)
+        self.app.take_action(1,float(self.app.t_min) - 1)
         mock_send_action.assert_called_once_with('TurnOnHeater')
 
     @patch('src.main.requests.get')
