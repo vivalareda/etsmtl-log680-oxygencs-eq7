@@ -1,16 +1,16 @@
-FROM python:3.8-alpine3.17 as build
+FROM python:3.8-alpine3.16 as build
 
-ARG HOST
-ARG TOKEN
-ARG DB_NAME=$
-ARG DB_USER
-ARG DB_HOST
-ARG DB_PASS
+ARG HOST=${{secrets.HOST}}
+ARG TOKEN=${{secrets.TOKEN}}
+ARG DB_NAME=${{secrets.DB_NAME}}
+ARG DB_USER=${{secrets.DB_USER}}
+ARG DB_HOST=${{secrets.DB_HOST}}
+ARG DB_PASS=${{secrets.DB_PASS}}
 
 WORKDIR /app
 
 # Install build dependencies
-RUN apk add --no-cache --virtual .build-deps gcc musl-dev python3-dev libffi-dev openssl-dev cargo postgresql-dev
+RUN apk add --no-cache --virtual .build-deps gcc musl-dev python3-dev libffi-dev openssl-dev postgresql-dev
 
 # Copy Pipfile and Pipfile.lock
 COPY Pipfile Pipfile.lock ./
@@ -24,9 +24,9 @@ RUN pip install --no-cache-dir pipenv \
 RUN apk del .build-deps
 
 # Copy the application code
-COPY . .
+COPY src/ src/
 
-FROM python:3.8-alpine3.17
+FROM python:3.8-alpine3.16
 
 WORKDIR /app
 
@@ -34,6 +34,6 @@ WORKDIR /app
 COPY --from=build /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 
 # Copy the application code
-COPY --from=build /app /app
+COPY --from=build /app/src /app/src
 
 CMD ["python", "./src/main.py"]
