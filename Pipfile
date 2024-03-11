@@ -14,7 +14,7 @@ coverage = "*"
 pylint = "*"
 
 [requires]
-python_version = "3.12"
+python_version = "3.8"
 
 [scripts]
 start = "python src/main.py"
