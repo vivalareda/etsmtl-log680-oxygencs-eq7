@@ -1,28 +1,39 @@
-# Build stage
 FROM python:3.8-alpine3.17 as build
 
 ARG HOST
 ARG TOKEN
+ARG DB_NAME=$
+ARG DB_USER
+ARG DB_HOST
+ARG DB_PASS
 
 WORKDIR /app
 
-# Ensure packages are installed for psycopg2-binary compilation if needed
+# Install build dependencies
 RUN apk add --no-cache --virtual .build-deps gcc musl-dev python3-dev libffi-dev openssl-dev cargo postgresql-dev
 
-# Copy Pipfile and Pipfile.lock into the image
+# Copy Pipfile and Pipfile.lock
 COPY Pipfile Pipfile.lock ./
 
-# Install pipenv and project dependencies
+# Install Python dependencies
 RUN pip install --no-cache-dir pipenv \
+    && pipenv lock \
     && pipenv install --deploy --system --ignore-pipfile
 
-# Cleanup unnecessary packages
+# Remove build dependencies
 RUN apk del .build-deps
 
-FROM python:3.8-alpine3.17
-WORKDIR /app
-# Ensure you copy the entire project into the image, adjust if necessary to include only needed files
-COPY --from=build /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
+# Copy the application code
 COPY . .
+
+FROM python:3.8-alpine3.17
+
+WORKDIR /app
+
+# Copy Python dependencies from the build stage
+COPY --from=build /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
+
+# Copy the application code
+COPY --from=build /app /app
 
 CMD ["python", "./src/main.py"]
