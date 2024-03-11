@@ -17,8 +17,7 @@ COPY Pipfile Pipfile.lock ./
 
 # Install Python dependencies
 RUN pip install --no-cache-dir pipenv \
-    && pipenv lock --keep-outdated \
-    && pipenv install --deploy --system --ignore-pipfile
+    && pipenv install --system --deploy --ignore-pipfile
 
 # Remove build dependencies
 RUN apk del .build-deps
