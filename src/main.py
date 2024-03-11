@@ -97,9 +97,10 @@ class App:
                                              str(timestamp),
                                              str(temperature),
                                              str(action))
-            self.crud_instance.close_connection()
         except psycopg2.Error as e:
             print(f"Failed to save event to database: {e}")
+        finally:
+            self.crud_instance.close_connection()
 
 if __name__ == "__main__":
     app = App()
