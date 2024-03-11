@@ -64,6 +64,9 @@ jobs:
           build-args: |
             HOST=${{ secrets.HOST }}
             TOKEN=${{ secrets.TOKEN }}
+            T_MIN=${{ secrets.T_MIN }}
+            T_MAX=${{ secrets.T_MAX }}
+            TICKS=${{ secrets.TICKS }}
             DB_NAME=${{ secrets.DB_NAME }}
             DB_USER=${{ secrets.DB_USER }}
             DB_HOST=${{ secrets.DB_HOST }}
