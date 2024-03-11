@@ -1,11 +1,11 @@
 FROM python:3.8-alpine3.16 as build
 
-ARG HOST=${{secrets.HOST}}
-ARG TOKEN=${{secrets.TOKEN}}
-ARG DB_NAME=${{secrets.DB_NAME}}
-ARG DB_USER=${{secrets.DB_USER}}
-ARG DB_HOST=${{secrets.DB_HOST}}
-ARG DB_PASS=${{secrets.DB_PASS}}
+ARG HOST
+ARG TOKEN
+ARG DB_NAME
+ARG DB_USER
+ARG DB_HOST
+ARG DB_PASS
 
 WORKDIR /app
 
