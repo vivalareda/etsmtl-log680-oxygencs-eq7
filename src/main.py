@@ -65,9 +65,10 @@ class App:
         """Callback method to handle sensor data on reception."""
         try:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
-            # _timestamp = data[0]["date"] # Variable not used
+            timestamp = data[0]["date"] # Variable not used
             temperature = float(data[0]["data"])
             self.take_action(temperature)
+            self.save_event_to_database(timestamp,temperature)
         except KeyError as err:
             print(f"Error processing sensor data: {err}")
 
