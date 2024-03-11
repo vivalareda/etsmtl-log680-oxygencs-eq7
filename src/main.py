@@ -1,10 +1,10 @@
 import json
-from src.crud import Crud, Table
 import logging
 import os
 import time
 import requests
 from signalrcore.hub_connection_builder import HubConnectionBuilder
+from src.crud import Crud, Table
 
 class App:
     def __init__(self):
@@ -19,7 +19,6 @@ class App:
 
         required_vars = ['HOST', 'TOKEN']
         self.crud_instance = Crud()
-        required_vars = ['HOST', 'TOKEN']
         missing_vars = [var for var in required_vars if os.getenv(var) is None]
 
         if missing_vars:
@@ -65,10 +64,10 @@ class App:
         """Callback method to handle sensor data on reception."""
         try:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
-            timestamp = data[0]["date"] # Variable not used
+            timestamp = data[0]["date"]  # Variable not used
             temperature = float(data[0]["data"])
             self.take_action(temperature)
-            self.save_event_to_database(timestamp,temperature)
+            self.save_event_to_database(timestamp, temperature)
         except KeyError as err:
             print(f"Error processing sensor data: {err}")
 
@@ -91,9 +90,8 @@ class App:
             self.crud_instance.connect()
             self.crud_instance.insert_metric(Table.HVAC_EVENTS, timestamp, str(temperature))
             self.crud_instance.close_connection()
-        except Exception as e:
+        except Exception as e:  # Consider catching more specific exceptions if possible
             print(f"Failed to save event to database: {e}")
-
 
 if __name__ == "__main__":
     app = App()
