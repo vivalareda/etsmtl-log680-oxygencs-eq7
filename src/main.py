@@ -1,8 +1,8 @@
 import json
 import logging
 import os
-import requests
 import time
+import requests
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 
 class App:
@@ -18,7 +18,6 @@ class App:
 
         required_vars = ['HOST', 'TOKEN']
         missing_vars = [var for var in required_vars if os.getenv(var) is None]
-
         if missing_vars:
             raise EnvironmentError(f"Missing environment variables: {', '.join(missing_vars)}")
 
@@ -53,23 +52,17 @@ class App:
         self._hub_connection.on("ReceiveSensorData", self.on_sensor_data_received)
         self._hub_connection.on_open(lambda: print("||| Connection opened."))
         self._hub_connection.on_close(lambda: print("||| Connection closed."))
-        self._hub_connection.on_error(
-            lambda data: print(f"||| An exception was thrown closed: {data['error']}")
-        )
+        self._hub_connection.on_error(lambda data: print(f"||| An exception was thrown: {data['error']}"))
 
     def on_sensor_data_received(self, data):
         """Callback method to handle sensor data on reception."""
         try:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
-            _timestamp = data[0]["date"]
+            # _timestamp = data[0]["date"] # Variable not used
             temperature = float(data[0]["data"])
             self.take_action(temperature)
-            # self.save_event_to_database(timestamp, temperature)
         except Exception as err:
             print(f"Error processing sensor data: {err}")
-
-    def save_event_to_database(self, timestamp, temperature):
-        """Save sensor data into database."""
 
     def take_action(self, temperature):
         """Take action to HVAC depending on current temperature."""
@@ -80,17 +73,13 @@ class App:
 
     def send_action_to_hvac(self, action):
         """Send action query to the HVAC service."""
-        try:
-            r = requests.get(f"{self.host}/api/hvac/{self.token}/{action}/{self.ticks}", timeout=10)
-            details = json.loads(r.text)
-            print(details, flush=True)
-        except requests.exceptions.RequestException as e:
-            print(f"Failed to send action to HVAC: {e}")
+        r = requests.get(f"{self.host}/api/hvac/{self.token}/{action}/{self.ticks}", timeout=10)
+        details = json.loads(r.text)
+        print(details, flush=True)
 
     def save_event_to_database(self, timestamp, temperature):
         """Save sensor data into database."""
-        # Implementation needed
-        pass
+        # TODO
 
 if __name__ == "__main__":
     app = App()
