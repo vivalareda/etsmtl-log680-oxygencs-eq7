@@ -1,12 +1,13 @@
 name: ci
 
 on:
+  pull_request:
   push:
     branches:
       - 'main'
 
 jobs:
-  docker:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -38,6 +39,11 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
 
+    docker:
+      needs: test
+      if: github.ref == 'refs/heads/main'
+      runs-on: ubuntu-latest
+      steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
