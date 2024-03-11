@@ -7,6 +7,7 @@ name = "pypi"
 requests = "*"
 signalrcore = "*"
 mysql-connector-python = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 coverage = "*"
