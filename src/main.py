@@ -12,7 +12,7 @@ class App:
         self.host = os.getenv('HOST')
         self.token = os.getenv('TOKEN')
 
-        self.ticks = int(os.getenv('TICKS', 1))
+        self.ticks = int(os.getenv('TICKS', '1'))
         self.t_max = os.getenv('T_MAX', '25')
         self.t_min = os.getenv('T_MIN', '18')
 
@@ -61,12 +61,15 @@ class App:
         """Callback method to handle sensor data on reception."""
         try:
             print(data[0]["date"] + " --> " + data[0]["data"], flush=True)
-            timestamp = data[0]["date"]
+            _timestamp = data[0]["date"]
             temperature = float(data[0]["data"])
             self.take_action(temperature)
             # self.save_event_to_database(timestamp, temperature)
         except Exception as err:
             print(f"Error processing sensor data: {err}")
+
+    def save_event_to_database(self, timestamp, temperature):
+        """Save sensor data into database."""
 
     def take_action(self, temperature):
         """Take action to HVAC depending on current temperature."""
