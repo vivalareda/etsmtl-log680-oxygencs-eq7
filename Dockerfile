@@ -1,4 +1,4 @@
-FROM python:3.8-alpine3.16 as build
+FROM python:3.8-alpine3.15 as build
 
 ARG HOST
 ARG TOKEN
@@ -17,7 +17,7 @@ COPY Pipfile Pipfile.lock ./
 
 # Install Python dependencies
 RUN pip install --no-cache-dir pipenv \
-    && pipenv lock \
+    && pipenv lock --keep-outdated \
     && pipenv install --deploy --system --ignore-pipfile
 
 # Remove build dependencies
@@ -26,7 +26,7 @@ RUN apk del .build-deps
 # Copy the application code
 COPY src/ src/
 
-FROM python:3.8-alpine3.16
+FROM python:3.8-alpine3.15
 
 WORKDIR /app
 
