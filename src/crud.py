@@ -36,7 +36,7 @@ class Crud:
             cursor.execute(insert_query, (metric_name, metric_value,metric_action))
             self.connection.commit()
             print("metric inserted successfully!")
-        except psycopg2.Error as e: 
+        except psycopg2.Error as e:
             print(f"Error creating metric: {e}")
         finally:
             cursor.close()
