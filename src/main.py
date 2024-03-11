@@ -55,9 +55,8 @@ class App:
         self._hub_connection.on_error(
             lambda data: print(
                 f"||| An exception was thrown: {data['error']}"
-            )
-        )
-        
+            ))
+
     def on_sensor_data_received(self, data):
         """Callback method to handle sensor data on reception."""
         try:
