@@ -91,7 +91,7 @@ class App:
             self.crud_instance.connect()
             self.crud_instance.insert_metric(Table.HVAC_EVENTS, timestamp, str(temperature))
             self.crud_instance.close_connection()
-        except psycopg2.Error as e:  
+        except psycopg2.Error as e:
             print(f"Failed to save event to database: {e}")
 
 if __name__ == "__main__":
