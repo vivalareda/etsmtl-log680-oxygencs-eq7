@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
+requests = "==2.31.0"
 signalrcore = "*"
 mysql-connector-python = "==8.3.0"
 psycopg2-binary = "==2.9.3"
