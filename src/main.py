@@ -3,6 +3,7 @@ import logging
 import os
 import time
 import requests
+import psycopg2.errors
 from signalrcore.hub_connection_builder import HubConnectionBuilder
 from src.crud import Crud, Table
 
@@ -90,7 +91,7 @@ class App:
             self.crud_instance.connect()
             self.crud_instance.insert_metric(Table.HVAC_EVENTS, timestamp, str(temperature))
             self.crud_instance.close_connection()
-        except Exception as e:  # Consider catching more specific exceptions if possible
+        except psycopg2.Error as e:  
             print(f"Failed to save event to database: {e}")
 
 if __name__ == "__main__":
