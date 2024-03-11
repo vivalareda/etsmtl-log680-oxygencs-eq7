@@ -1,4 +1,5 @@
 from signalrcore.hub_connection_builder import HubConnectionBuilder
+from crud import Crud, Table
 import logging
 import requests
 import json
@@ -17,10 +18,10 @@ class App:
         self.T_MAX = os.getenv('T_MAX', '25')
         self.T_MIN = os.getenv('T_MIN', '18')
         # self.database = os.getenv('DATABASE')
-
-        required_vars = ['HOST', 'TOKEN', 'DATABASE']
+        self.crud_instance = Crud()
+        required_vars = ['HOST', 'TOKEN']
         missing_vars = [var for var in required_vars if os.getenv(var) is None]
-
+    
         if missing_vars:
             raise EnvironmentError(f"Missing environment variables: {', '.join(missing_vars)}")
 
@@ -86,11 +87,11 @@ class App:
     def save_event_to_database(self, timestamp, temperature):
         """Save sensor data into database."""
         try:
-            # To implement
-            pass
-        except requests.exceptions.RequestException as e:
-            # To implement
-            pass
+            self.crud_instance.connect()
+            self.crud_instance.insert_metric(Table.HVAC_EVENTS, timestamp, str(temperature))
+            self.crud_instance.close_connection()
+        except Exception as e:
+            print(f"Failed to save event to database: {e}")
 
 
 if __name__ == "__main__":
