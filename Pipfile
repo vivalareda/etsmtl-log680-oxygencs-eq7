@@ -17,6 +17,6 @@ pylint = "*"
 python_version = "3.8"
 
 [scripts]
-start = "python src/main.py"
+start = "python -m src.main"
 coverage = "coverage run -m unittest discover"
 lint = "pylint src --disable=C0114,C0115,C0116 --ignore=migrations"

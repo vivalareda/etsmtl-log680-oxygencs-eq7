@@ -14,7 +14,7 @@ class App:
         self.host = os.getenv('HOST')
         self.token = os.getenv('TOKEN')
 
-        self.ticks = int(os.getenv('TICKS', '1'))
+        self.ticks = int(os.getenv('TICKS', '10'))
         self.t_max = os.getenv('T_MAX', '25')
         self.t_min = os.getenv('T_MIN', '18')
 
@@ -54,6 +54,7 @@ class App:
             .build()
         )
         self._hub_connection.on("ReceiveSensorData", self.on_sensor_data_received)
+        self._hub_connection.on("ReceiveMessage", self.on_sensor_data_received)
         self._hub_connection.on_open(lambda: print("||| Connection opened."))
         self._hub_connection.on_close(lambda: print("||| Connection closed."))
         self._hub_connection.on_error(
