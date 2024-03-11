@@ -23,11 +23,11 @@ jobs:
       - name: Install dependencies with pipenv
         run: pipenv install --dev
 
-      - name: Run unittests with coverage
-        run: pipenv run coverage
-
       - name: Lint the code
         run: pipenv run lint
+
+      - name: Run unittests with coverage
+        run: pipenv run coverage
 
       - name: Generate coverage report
         run: pipenv run coverage xml
