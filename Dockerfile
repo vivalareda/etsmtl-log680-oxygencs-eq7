@@ -1,4 +1,4 @@
-FROM python:3.8-alpine3.15 as build
+FROM python:3.8-alpine3.14 as build
 
 ARG HOST
 ARG TOKEN
@@ -25,7 +25,8 @@ RUN apk del .build-deps
 # Copy the application code
 COPY src/ src/
 
-FROM python:3.8-alpine3.15
+# Distroless base image
+FROM gcr.io/distroless/python3-debian11
 
 WORKDIR /app
 
