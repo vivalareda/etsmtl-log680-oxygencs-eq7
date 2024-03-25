@@ -8,6 +8,9 @@ requests = "*"
 signalrcore = "*"
 mysql-connector-python = "*"
 psycopg2 = "*"
+json = "*"
+logging = "*"
+time = "*"
 
 [dev-packages]
 coverage = "*"
