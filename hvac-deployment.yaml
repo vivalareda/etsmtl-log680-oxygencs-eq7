@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hvac-controller
+  namespace: grp02eq7-namespace
 spec:
-  replicas: 2 # Vous pouvez ajuster le nombre de réplicas selon les besoins
+  replicas: 1
   selector:
     matchLabels:
       app: hvac-controller
@@ -14,11 +15,18 @@ spec:
     spec:
       containers:
       - name: hvac-controller
-        image: axldev99/etsmtl-log680-oxygencs-eq7:latest # Remplacez par le chemin de votre image
-        ports:
-        - containerPort: 80 # Ajustez selon le port utilisé par votre application
+        image: axldev99/etsmtl-log680-oxygencs-eq7:latest
+        resources:
+          limits:
+            cpu: "0.3"
+            memory: "256Mi"
+          requests:
+            cpu: "50m"
+            memory: "128Mi"
         envFrom:
         - configMapRef:
             name: app-config
         - secretRef:
             name: app-secrets
+        ports:
+        - containerPort: 80
