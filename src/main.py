@@ -13,7 +13,6 @@ class App:
         self._hub_connection = None
         self.host = os.getenv('HOST')
         self.token = os.getenv('TOKEN')
-
         self.ticks = int(os.getenv('TICKS', '5'))
         self.t_max = os.getenv('T_MAX', '25')
         self.t_min = os.getenv('T_MIN', '18')
