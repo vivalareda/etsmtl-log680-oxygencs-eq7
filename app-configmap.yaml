@@ -12,7 +12,10 @@ data:
   KANBAN_COLUMN: "value1;value2;value3"
   OWNER: "axldev99"
   REPO: "etsmtl-log680-oxygencs-eq7"
-  HOST: "http://159.203.50.162/"
+  HOST: "http://159.203.50.162"
   T_MIN: "18"
   T_MAX: "25"
   TICKS: "5"
+  DOCKERHUB_USERNAME: "axldev99" # "axldev99" en base64
+  DOCKERHUB_TOKEN: "dckr_pat_kroZbDSVwVTerVleytA_8KJ0CSw" # "dckr_pat_kroZbDSVwVTerVleytA_8KJ0CSw" en base64
+  DOCKERHUB_REPO: "etsmtl-log680-oxygencs-eq7" # "etsmtl-log680-oxygencs-eq7" en base64

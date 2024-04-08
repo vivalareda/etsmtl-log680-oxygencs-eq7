@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: hvac-controller
-        image: axldev99/etsmtl-log680-oxygencs-eq7:latest
+        image: axldev99/etsmtl-log680-oxygencs-eq7:etsmtl-log680-oxygencs-eq7.latest
         resources:
           limits:
             cpu: "0.3"
@@ -30,3 +30,5 @@ spec:
             name: app-secrets
         ports:
         - containerPort: 80
+      imagePullSecrets:
+      - name: my-dockerhub-secret
