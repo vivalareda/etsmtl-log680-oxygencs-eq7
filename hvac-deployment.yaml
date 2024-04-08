@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hvac-controller
+spec:
+  replicas: 2 # Vous pouvez ajuster le nombre de réplicas selon les besoins
+  selector:
+    matchLabels:
+      app: hvac-controller
+  template:
+    metadata:
+      labels:
+        app: hvac-controller
+    spec:
+      containers:
+      - name: hvac-controller
+        image: axldev99/etsmtl-log680-oxygencs-eq7:latest # Remplacez par le chemin de votre image
+        ports:
+        - containerPort: 80 # Ajustez selon le port utilisé par votre application
+        envFrom:
+        - configMapRef:
+            name: app-config
+        - secretRef:
+            name: app-secrets
