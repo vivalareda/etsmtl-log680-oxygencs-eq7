@@ -8,6 +8,7 @@ data:
   DB_NAME: "db02eq7"
   DB_USER: "user02eq7"
   DB_HOST: "157.230.69.113"
+  DB_PASS: "EKvaUWzO0mHHdXuD"
   KANBAN_COLUMN: "value1;value2;value3"
   OWNER: "axldev99"
   REPO: "etsmtl-log680-oxygencs-eq7"
